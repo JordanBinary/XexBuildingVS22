@@ -1,0 +1,21 @@
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildToolsPath32>C:\Windows\Microsoft.NET\Framework\v4.0.30319</MSBuildToolsPath32>
+  </PropertyGroup>
+  
+  <Target Name="Xbox360Build" BeforeTargets="PrepareForBuild" Condition="'$(Xbox360BuildExecuted)' != 'true'">
+    <PropertyGroup>
+      <BuildToolPath>$(MSBuildToolsPath32)\MSBuild.exe</BuildToolPath>
+      <Xbox360BuildExecuted>true</Xbox360BuildExecuted>
+    </PropertyGroup>
+    
+    <Exec Command="&quot;$(BuildToolPath)&quot; &quot;$(ProjectDir)Client.vcxproj&quot; /p:Configuration=$(Configuration) /p:Platform=&quot;Xbox 360&quot; /t:Build /p:UseEnv=true /p:Xbox360BuildExecuted=true" />
+    
+    <!-- Prevent the normal build from running -->
+    <Message Text="Xbox 360 build completed. Skipping normal build." Importance="high" />
+    <Error Text="Stopping build to prevent further execution." />
+  </Target>
+
+  <Import Project="$(VCTargetsPath)\Platforms\Xbox 360\ImportBefore\*.2010-01.targets" Condition="Exists('$(VCTargetsPath)\Platforms\Xbox 360\ImportBefore')" />
+  <Import Project="$(VCTargetsPath)\Platforms\Xbox 360\ImportAfter\*.2010-01.targets" Condition="Exists('$(VCTargetsPath)\Platforms\Xbox 360\ImportAfter')" />
+</Project>
